@@ -14,9 +14,9 @@ void
 print_usage(char *name)
 {
 	puts("Usage:");
-	printf("%s until [pair]...\n", name);
-	puts("until ::= <int>");
-	puts("pair ::= <int><text>");
+	printf("%s <until> [<pair>]...\n", name);
+	puts("<until> ::= <digit>+");
+	puts("<pair> ::= <digit>+<word>+");
 	puts("Example:");
 	printf("%s 100 3fizz 5buzz\n", name);
 	puts(
