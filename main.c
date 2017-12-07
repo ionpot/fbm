@@ -1,14 +1,9 @@
-#include "pair.h"
+#include "list.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-static struct {
-	long max;
-	long pair_count;
-} options;
-
-static struct Pair *list;
+static struct List list;
 
 void
 print_usage(char *name)
@@ -26,63 +21,43 @@ print_usage(char *name)
 }
 
 void
-print_divisors(void)
+print_number(long i)
 {
-}
-
-int
-mark_divisors(long i)
-{
-}
-
-void print_line(long i)
-{
-	int marked = mark_divisors(i);
+	int marked = list_mark(&list, i);
 
 	if (marked)
-		print_divisors();
+		list_print(&list);
 
 	else
 		printf("%l", i);
 
-	putchar('\n');
+	putchar(' ');
 }
 
 void
-set_max(char *input)
-{
-	options.max = atoi(input);
-}
-
-void
-init_pairs(int count, char **argv)
-{
-}
-
-void
-begin(void)
+begin(long max)
 {
 	long i = 0;
 
-	while (i < options.max)
-		print_line(++i);
+	while (i < max)
+		print_number(++i);
 }
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
-	switch (argc) {
-	case 1:
+	long max;
+
+	if (argc > 1) {
+		max = atoi(argv[1]);
+
+		if (argc > 2)
+			list_init(&list, argc - 2, argv + 2);
+
+		begin(max);
+
+	} else {
 		print_usage(argv[0]);
-		break;
-	case 2:
-		set_max(argv[1]);
-		begin();
-		break;
-	default:
-		set_max(argv[1]);
-		init_pairs(argc - 2, argv + 2);
-		begin();
-		break;
 	}
 
 	return 0;
