@@ -83,6 +83,51 @@ mark_pairs(struct List *list, long dividend)
 	return marked;
 }
 
+static void
+print_divisors(struct List *list)
+{
+	assert(list != NULL);
+
+	int i = list->count;
+	struct Pair *pair = skip_lcm(list) + i;
+
+	while (i--) {
+		--pair;
+
+		if (pair->isdivisor)
+			pair_print(pair);
+	}
+}
+
+static void
+print_pairs(struct List *list)
+{
+	assert(list != NULL);
+
+	int i = list->count;
+	struct Pair *pair = skip_lcm(list) + i;
+
+	while (i--)
+		pair_print(--pair);
+}
+
+static void
+print_lcm(struct List *list)
+{
+	assert(list != NULL);
+
+	struct Pair *lcm = list->lcm;
+
+	assert(lcm != NULL);
+
+	if (lcm->text == NULL)
+		print_pairs(list);
+
+	else
+		pair_print(lcm);
+}
+
+/* export */
 int
 list_init(struct List *list, int count)
 {
@@ -172,6 +217,17 @@ list_findlcm(struct List *list)
 }
 
 void
-list_print(const struct List *)
+list_print(const struct List *list)
 {
+	assert(list != NULL);
+
+	struct Pair *lcm = list->lcm;
+
+	assert(lcm != NULL);
+
+	if (lcm->isdivisor)
+		print_lcm(list);
+
+	else
+		print_divisors(list);
 }
