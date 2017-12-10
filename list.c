@@ -46,6 +46,15 @@ find_lcm(struct List *list)
 	return mult / gcd;
 }
 
+static void
+setlcm_tofirst(struct List *list)
+{
+	assert(list != NULL);
+
+	list->lcm = list->buffer;
+	list->count -= 1;
+}
+
 static struct Pair *
 skip_lcm(struct List *list)
 {
@@ -151,14 +160,14 @@ list_findlcm(struct List *list)
 
 	switch (list->count) {
 	case 1:
-		list->lcm = first;
+		setlcm_tofirst(list);
 		break;
 
 	default:
 		pair_init(list->lcm, find_lcm(list), NULL);
 
 		if (!pair_cmp(list->lcm, first))
-			list->lcm = first;
+			setlcm_tofirst(list);
 	}
 }
 
