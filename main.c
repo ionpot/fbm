@@ -21,26 +21,20 @@ print_usage(char *name)
 }
 
 void
-print_number(long i)
-{
-	int marked = list_mark(&list, i);
-
-	if (marked)
-		list_print(&list);
-
-	else
-		printf("%l", i);
-
-	putchar(' ');
-}
-
-void
 begin(long max)
 {
 	long i = 0;
 
-	while (i < max)
-		print_number(++i);
+	while (i++ < max) {
+		if (i > 1)
+			putchar(' ');
+
+		if (list_mark(&list, i))
+			list_print(&list);
+
+		else
+			printf("%l", i);
+	}
 }
 
 int
