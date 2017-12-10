@@ -6,13 +6,17 @@
 struct List {
 	int count;
 	struct Pair *buffer;
-	long lcm;
+	struct Pair *lcm;
 };
 
-void list_init(struct List *, int count, char **argv);
+int  list_init(struct List *, int count);
 void list_free(struct List *);
 
-int list_mark(struct List *, long dividend);
+int    list_mark(struct List *, long dividend);
+void * list_next(struct List *);
+void   list_sort(struct List *);
+
+void list_findlcm(struct List *);
 
 void list_print(const struct List *);
 

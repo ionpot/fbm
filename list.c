@@ -2,27 +2,94 @@
 
 #include <assert.h>
 #include <stddef.h>
+#include <stdlib.h>
 
-static void
-populate(struct List *list, int count, char **argv)
+static long
+find_gcd(long a, long b)
 {
+	assert(a > b);
+	assert(b != 0);
+
+	if (a == 1) return 1;
+	if (b == 1) return 1;
+
+	long rem = a % b;
+
+	return rem
+		? find_gcd(b, rem)
+		: b;
 }
 
-void
-list_init(struct List *list, int count, char **argv)
+static long
+find_lcm(struct List *list)
+{
+	assert(list != NULL);
+	assert(list->count > 1);
+
+	int i = list->count - 1;
+	struct Pair *pair = list->buffer + i;
+	long num = pair->number;
+	long mult = num;
+	long gcd = num;
+
+	while (i--) {
+		--pair;
+
+		num = pair->number;
+
+		assert(num > 0);
+
+		mult *= num;
+		gcd = find_gcd(num, gcd);
+	}
+
+	return mult / gcd;
+}
+
+static struct Pair *
+skip_lcm(struct List *list)
+{
+	assert(list != NULL);
+
+	int offset = (list->buffer != list->lcm);
+
+	return list->buffer + offset;
+}
+
+static int
+mark_pairs(struct List *list, long dividend)
+{
+	assert(list != NULL);
+
+	struct Pair *pair = skip_lcm(list);
+	int i = list->count;
+	int marked = 0;
+
+	for (; i--; pair++) {
+		pair_setdivisor(pair, dividend);
+
+		marked += pair->isdivisor;
+	}
+
+	return marked;
+}
+
+int
+list_init(struct List *list, int count)
 {
 	assert(list != NULL);
 	assert(count > 0);
-	assert(argv != NULL);
 
-	struct Pair *buffer = malloc(count * sizeof(struct Pair));
+	struct Pair *buffer =
+		malloc((count + 1) * sizeof(struct Pair));
 
-	list->buffer = buffer;
 	list->count = 0;
-	list->lcm = 0;
+	list->buffer = buffer;
+	list->lcm = buffer + count;
 
-	if (buffer != NULL)
-		populate(list, count, argv);
+	pair_init(list->lcm, 0, NULL);
+
+	return buffer != NULL;
 }
 
 void
@@ -34,28 +101,59 @@ list_free(struct List *list)
 		free(list->buffer);
 }
 
+void *
+list_next(struct List *list)
+{
+	assert(list != NULL);
+
+	return list->buffer + list->count++;
+}
+
 int
 list_mark(struct List *list, long dividend)
 {
 	assert(list != NULL);
 
-	struct Pair *pair;
-	int marked = 0;
-	int i = 0;
+	struct Pair *lcm = list->lcm;
 
-	for (; i < list->count; i++) {
-		pair = list->buffer + i;
+	pair_setdivisor(lcm, dividend);
 
-		pair_setdivisor(pair, dividend);
+	return lcm->isdivisor
+		? 1
+		: mark_pairs(list, dividend);
+}
 
-		marked += pair->isdivisor;
+void
+list_sort(struct List *list)
+{
+	assert(list != NULL);
 
-		if (pair->number == list->lcm)
-			if (pair->isdivisor)
-				break;
+	qsort(
+		list->buffer,
+		list->count,
+		sizeof(struct Pair),
+		pair_cmp);
+}
+
+void
+list_findlcm(struct List *list)
+{
+	assert(list != NULL);
+	assert(list->count > 0);
+
+	struct Pair *first = list->buffer;
+
+	switch (list->count) {
+	case 1:
+		list->lcm = first;
+		break;
+
+	default:
+		pair_init(list->lcm, find_lcm(list), NULL);
+
+		if (!pair_cmp(list->lcm, first))
+			list->lcm = first;
 	}
-
-	return marked;
 }
 
 void
