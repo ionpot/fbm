@@ -1,5 +1,6 @@
 #include "list.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -24,7 +25,7 @@ print_usage(char *name)
 static void
 print_nolist(long i)
 {
-	printf("%l", i);
+	printf("%ld", i);
 }
 
 static void
@@ -34,7 +35,7 @@ print_list(long i)
 		list_print(&list);
 
 	else
-		printf("%l", i);
+		printf("%ld", i);
 }
 
 static void
@@ -53,7 +54,7 @@ begin(long max)
 }
 
 static int
-init_list(int argc, const char **argv)
+init_list(int argc, char **argv)
 {
 	assert(argc > 0);
 	assert(argv != NULL);
@@ -72,7 +73,7 @@ init_list(int argc, const char **argv)
 }
 
 static int
-init(int argc, const char **argv)
+init(int argc, char **argv)
 {
 	int ok = 1;
 
