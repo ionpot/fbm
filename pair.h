@@ -11,7 +11,7 @@ void pair_init(struct Pair *, long number, char *text);
 void pair_parse(struct Pair *, const char *);
 void pair_setdivisor(struct Pair *, long);
 
-int  pair_cmp(const struct Pair *, const struct Pair *);
+int  pair_cmp(const void *, const void *);
 void pair_print(const struct Pair *);
 
 #endif

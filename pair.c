@@ -33,15 +33,16 @@ pair_setdivisor(struct Pair *pair, long i)
 }
 
 int
-pair_cmp(
-	const struct Pair *a,
-	const struct Pair *b)
+pair_cmp(const void *a, const void *b)
 {
-	assert(a != NULL);
-	assert(b != NULL);
+	const struct Pair *pa = a;
+	const struct Pair *pb = b;
 
-	long na = a->number;
-	long nb = b->number;
+	assert(pa != NULL);
+	assert(pb != NULL);
+
+	long na = pa->number;
+	long nb = pb->number;
 
 	return (na < nb) - (na > nb);
 }
