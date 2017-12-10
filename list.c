@@ -56,7 +56,7 @@ setlcm_tofirst(struct List *list)
 }
 
 static struct Pair *
-skip_lcm(struct List *list)
+skip_lcm(const struct List *list)
 {
 	assert(list != NULL);
 
@@ -84,7 +84,7 @@ mark_pairs(struct List *list, long dividend)
 }
 
 static void
-print_divisors(struct List *list)
+print_divisors(const struct List *list)
 {
 	assert(list != NULL);
 
@@ -100,7 +100,7 @@ print_divisors(struct List *list)
 }
 
 static void
-print_pairs(struct List *list)
+print_pairs(const struct List *list)
 {
 	assert(list != NULL);
 
@@ -112,7 +112,7 @@ print_pairs(struct List *list)
 }
 
 static void
-print_lcm(struct List *list)
+print_lcm(const struct List *list)
 {
 	assert(list != NULL);
 
