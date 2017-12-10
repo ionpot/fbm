@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 static struct List list;
+static void (*printnum)(long) = NULL;
 
 static void
 print_usage(char *name)
@@ -21,25 +22,78 @@ print_usage(char *name)
 }
 
 static void
+print_nolist(long i)
+{
+	printf("%l", i);
+}
+
+static void
+print_list(long i)
+{
+	if (list_mark(&list, i))
+		list_print(&list);
+
+	else
+		printf("%l", i);
+}
+
+static void
 begin(long max)
 {
+	assert(printnum != NULL);
+
 	long i = 0;
 
 	while (i++ < max) {
 		if (i > 1)
 			putchar(' ');
 
-		if (list_mark(&list, i))
-			list_print(&list);
-
-		else
-			printf("%l", i);
+		printnum(i);
 	}
 }
 
 static int
-init(int argc, char **argv)
+init_list(int argc, const char **argv)
 {
+	assert(argc > 0);
+	assert(argv != NULL);
+
+	int ok = list_init(&list, argc);
+
+	if (ok) {
+		while (argc--)
+			list_add(&list, argv[argc]);
+
+		list_sort(&list);
+		list_findlcm(&list);
+	}
+
+	return ok;
+}
+
+static int
+init(int argc, const char **argv)
+{
+	int ok = 1;
+
+	if (argc) {
+		ok = init_list(argc, argv);
+
+		if (ok)
+			printnum = print_list;
+
+	} else {
+		printnum = print_nolist;
+	}
+
+	return ok;
+}
+
+static void
+cleanup(void)
+{
+	if (printnum == print_list)
+		list_free(&list);
 }
 
 int
@@ -50,9 +104,10 @@ main(int argc, char **argv)
 	if (argc > 1) {
 		max = atoi(argv[1]);
 
-		if (argc > 2)
-			if (init(argc - 2, argv + 2))
-				begin(max);
+		if (init(argc - 2, argv + 2)) {
+			begin(max);
+			cleanup();
+		}
 
 	} else {
 		print_usage(argv[0]);
