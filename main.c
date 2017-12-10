@@ -51,6 +51,8 @@ begin(long max)
 
 		printnum(i);
 	}
+
+	putchar('\n');
 }
 
 static int
