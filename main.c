@@ -5,7 +5,7 @@
 
 static struct List list;
 
-void
+static void
 print_usage(char *name)
 {
 	puts("Usage:");
@@ -20,7 +20,7 @@ print_usage(char *name)
 		" 5 with \"buzz\", 15 with \"fizzbuzz\".");
 }
 
-void
+static void
 begin(long max)
 {
 	long i = 0;
@@ -37,6 +37,11 @@ begin(long max)
 	}
 }
 
+static int
+init(int argc, char **argv)
+{
+}
+
 int
 main(int argc, char **argv)
 {
@@ -46,9 +51,8 @@ main(int argc, char **argv)
 		max = atoi(argv[1]);
 
 		if (argc > 2)
-			list_init(&list, argc - 2, argv + 2);
-
-		begin(max);
+			if (init(argc - 2, argv + 2))
+				begin(max);
 
 	} else {
 		print_usage(argv[0]);
