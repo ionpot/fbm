@@ -101,12 +101,18 @@ list_free(struct List *list)
 		free(list->buffer);
 }
 
-void *
-list_next(struct List *list)
+void
+list_add(struct List *list, const char *raw)
 {
 	assert(list != NULL);
+	assert(raw != NULL);
 
-	return list->buffer + list->count++;
+	struct Pair *pair = list->buffer + list->count;
+
+	pair_parse(pair, raw);
+
+	if (pair->number)
+		list->count += 1;
 }
 
 int
