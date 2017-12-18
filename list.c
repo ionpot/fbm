@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 static long
@@ -164,6 +165,7 @@ list_add(struct List *list, const char *raw)
 	struct Pair *pair = list->buffer + list->count;
 
 	pair_parse(pair, raw);
+	printf("Pair %ld %s\n", pair->number, pair->text);
 
 	if (pair->number)
 		list->count += 1;
@@ -214,6 +216,8 @@ list_findlcm(struct List *list)
 		if (!pair_cmp(list->lcm, first))
 			setlcm_tofirst(list);
 	}
+
+	printf("LCM %ld %s\n", list->lcm->number, list->lcm->text);
 }
 
 void
