@@ -7,23 +7,10 @@
 
 extern struct Options options;
 
+extern void usage_print(void);
+
 static struct List list;
 static void (*printnum)(long) = NULL;
-
-static void
-print_usage(char *name)
-{
-	puts("Usage:");
-	printf("%s <until> [<pair>]...\n", name);
-	puts("<until> ::= <digit>+");
-	puts("<pair> ::= <digit>+<word>+");
-	puts("Example:");
-	printf("%s 100 3fizz 5buzz\n", name);
-	puts(
-		"This will loop from 1 to 100 (inclusive),"
-		" substituting the numbers divisible by 3 with \"fizz\","
-		" 5 with \"buzz\", 15 with \"fizzbuzz\".");
-}
 
 static void
 print_nolist(long i)
@@ -140,7 +127,7 @@ main(int argc, char **argv)
 		}
 
 	} else {
-		print_usage(*argv);
+		usage_print();
 	}
 
 	return 0;
