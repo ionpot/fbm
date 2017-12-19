@@ -61,7 +61,7 @@ skip_lcm(const struct List *list)
 {
 	assert(list != NULL);
 
-	int offset = (list->buffer != list->lcm);
+	int offset = (list->buffer == list->lcm);
 
 	return list->buffer + offset;
 }
