@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 static long
-find_gcd(long a, long b)
+calc_gcd(long a, long b)
 {
 	assert(a > b);
 	assert(b != 0);
@@ -17,43 +17,57 @@ find_gcd(long a, long b)
 	long rem = a % b;
 
 	return rem
-		? find_gcd(b, rem)
+		? calc_gcd(b, rem)
 		: b;
 }
 
 static long
-find_lcm(struct List *list)
+calc_lcm(long a, long b)
 {
-	assert(list != NULL);
-	assert(list->count > 1);
-
-	int i = list->count - 1;
-	struct Pair *pair = list->buffer + i;
-	long num = pair->number;
-	long mult = num;
-	long gcd = num;
-
-	while (i--) {
-		--pair;
-
-		num = pair->number;
-
-		assert(num > 0);
-
-		mult *= num;
-		gcd = find_gcd(num, gcd);
-	}
-
-	return mult / gcd;
+	return (a * b) / calc_gcd(a, b);
 }
 
 static void
-setlcm_tofirst(struct List *list)
+set_first_as_lcm(struct List *list)
 {
 	assert(list != NULL);
 
 	list->lcm = list->buffer;
 	list->count -= 1;
+}
+
+static void
+new_lcm_pair(struct List *list, long number)
+{
+	assert(list != NULL);
+
+	struct Pair *pair = list->buffer + list->count;
+
+	pair_init(pair, number, NULL);
+}
+
+static void
+find_lcm_pair(struct List *list)
+{
+	assert(list != NULL);
+	assert(list->count > 1);
+
+	int i = list->count - 1;
+	struct Pair *first = list->buffer;
+	struct Pair *pair = first + i;
+	long lcm = pair->number;
+
+	while (--pair != first)
+		lcm = calc_lcm(pair->number, lcm);
+
+	if (first->number == lcm) {
+		set_first_as_lcm(list);
+
+	} else {
+		lcm = calc_lcm(first->number, lcm);
+
+		new_lcm_pair(list, lcm);
+	}
 }
 
 static struct Pair *
@@ -203,18 +217,13 @@ list_findlcm(struct List *list)
 	assert(list != NULL);
 	assert(list->count > 0);
 
-	struct Pair *first = list->buffer;
-
 	switch (list->count) {
 	case 1:
-		setlcm_tofirst(list);
+		set_first_as_lcm(list);
 		break;
 
 	default:
-		pair_init(list->lcm, find_lcm(list), NULL);
-
-		if (!pair_cmp(list->lcm, first))
-			setlcm_tofirst(list);
+		find_lcm_pair(list);
 	}
 
 	printf("LCM %ld %s\n", list->lcm->number, list->lcm->text);
