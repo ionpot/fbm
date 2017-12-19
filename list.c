@@ -24,7 +24,11 @@ calc_gcd(long a, long b)
 static long
 calc_lcm(long a, long b)
 {
-	return (a * b) / calc_gcd(a, b);
+	long gcd = (a > b)
+		? calc_gcd(a, b)
+		: calc_gcd(b, a);
+
+	return (a * b) / gcd;
 }
 
 static void
