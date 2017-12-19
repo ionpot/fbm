@@ -44,6 +44,8 @@ new_lcm_pair(struct List *list, long number)
 	struct Pair *pair = list->buffer + list->count;
 
 	pair_init(pair, number, NULL);
+
+	list->lcm = pair;
 }
 
 static void
