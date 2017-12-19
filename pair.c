@@ -2,25 +2,14 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 void
-pair_init(struct Pair *pair, long number, char *text)
+pair_init(struct Pair *pair, long number, const char *text)
 {
 	assert(pair != NULL);
 
 	pair->number = number;
 	pair->text = text;
-	pair->isdivisor = 0;
-}
-
-void
-pair_parse(struct Pair *pair, const char *raw)
-{
-	assert(pair != NULL);
-	assert(raw != NULL);
-
-	pair->number = strtol(raw, &pair->text, 10);
 	pair->isdivisor = 0;
 }
 

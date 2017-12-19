@@ -1,8 +1,11 @@
 #include "list.h"
+#include "options.h"
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+extern struct Options options;
 
 static struct List list;
 static void (*printnum)(long) = NULL;
@@ -31,21 +34,37 @@ print_nolist(long i)
 static void
 print_list(long i)
 {
+	int apn = options.always_print_number;
+
+	if (apn)
+		printf("%ld", i);
+
 	if (list_mark(&list, i))
 		list_print(&list);
 
-	else
+	else if (!apn)
 		printf("%ld", i);
 }
 
 static void
-begin(long max)
+begin(void)
 {
-	assert(printnum != NULL);
+	if (!options.max)
+		goto no_max;
+
+	if (list.count) {
+		list_sort(&list);
+		list_findlcm(&list);
+
+		printnum = print_list;
+
+	} else {
+		printnum = print_nolist;
+	}
 
 	long i = 0;
 
-	while (i++ < max) {
+	while (i++ < options.max) {
 		if (i > 1)
 			putchar(' ');
 
@@ -53,43 +72,11 @@ begin(long max)
 	}
 
 	putchar('\n');
-}
 
-static int
-init_list(int argc, char **argv)
-{
-	assert(argc > 0);
-	assert(argv != NULL);
+	return;
 
-	int ok = list_init(&list, argc);
-
-	if (ok) {
-		while (argc--)
-			list_add(&list, argv[argc]);
-
-		list_sort(&list);
-		list_findlcm(&list);
-	}
-
-	return ok;
-}
-
-static int
-init(int argc, char **argv)
-{
-	int ok = 1;
-
-	if (argc) {
-		ok = init_list(argc, argv);
-
-		if (ok)
-			printnum = print_list;
-
-	} else {
-		printnum = print_nolist;
-	}
-
-	return ok;
+no_max:
+	puts("No max provided.");
 }
 
 static void
@@ -99,21 +86,61 @@ cleanup(void)
 		list_free(&list);
 }
 
+static void
+parse_pair(const char *arg)
+{
+	assert(arg != NULL);
+
+	char *text;
+	long num = strtol(arg, &text, 10);
+
+	if (num) {
+		if (*text == '\0')
+			options.max = num;
+
+		else
+			list_add(&list, num, text);
+
+	} else {
+		printf("Ignoring: %s\n", arg);
+	}
+}
+
+static void
+parse_arg(const char *arg)
+{
+	assert(arg != NULL);
+
+	if (*arg == '-')
+		options_parse(arg + 1);
+
+	else
+		parse_pair(arg);
+}
+
+static void
+parse_args(int argc, char **argv)
+{
+	assert(argv != NULL);
+
+	if (--argc) {
+		parse_arg(argv[argc]);
+		parse_args(argc, argv);
+	}
+}
+
 int
 main(int argc, char **argv)
 {
-	long max;
-
 	if (argc > 1) {
-		max = atoi(argv[1]);
-
-		if (init(argc - 2, argv + 2)) {
-			begin(max);
+		if (list_init(&list, argc - 1)) {
+			parse_args(argc, argv);
+			begin();
 			cleanup();
 		}
 
 	} else {
-		print_usage(argv[0]);
+		print_usage(*argv);
 	}
 
 	return 0;

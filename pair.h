@@ -3,11 +3,11 @@
 
 struct Pair {
 	long number;
-	char *text;
+	const char *text;
 	int isdivisor;
 };
 
-void pair_init(struct Pair *, long number, char *text);
+void pair_init(struct Pair *, long, const char *);
 void pair_parse(struct Pair *, const char *);
 void pair_setdivisor(struct Pair *, long);
 

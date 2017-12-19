@@ -177,18 +177,18 @@ list_free(struct List *list)
 }
 
 void
-list_add(struct List *list, const char *raw)
+list_add(struct List *list, long number, const char *text)
 {
 	assert(list != NULL);
-	assert(raw != NULL);
+	assert(number > 0);
+	assert(text != NULL);
 
 	struct Pair *pair = list->buffer + list->count;
 
-	pair_parse(pair, raw);
+	pair_init(pair, number, text);
 	printf("Pair %ld %s\n", pair->number, pair->text);
 
-	if (pair->number)
-		list->count += 1;
+	list->count += 1;
 }
 
 int
