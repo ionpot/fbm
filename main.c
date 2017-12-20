@@ -67,13 +67,6 @@ no_max:
 }
 
 static void
-cleanup(void)
-{
-	if (printnum == print_list)
-		list_free(&list);
-}
-
-static void
 parse_pair(const char *arg)
 {
 	assert(arg != NULL);
@@ -123,7 +116,7 @@ main(int argc, char **argv)
 		if (list_init(&list, argc - 1)) {
 			parse_args(argc, argv);
 			begin();
-			cleanup();
+			list_free(&list);
 		}
 
 	} else {
