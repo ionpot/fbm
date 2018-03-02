@@ -7,12 +7,20 @@
 	NAME " [OPTIONS]... UNTIL [PAIR]..."
 
 #define DESCR \
-	"Prints space-separated numbers starting from 1 until UNTIL is reached (prints UNTIL itself as well). A PAIR is a number and a word mushed together, such as \"3fizz\" or \"5buzz\"."\
+	"Prints space-separated numbers starting from 1"\
+	" until UNTIL is reached (prints UNTIL itself as well)."\
+	" A PAIR is a number and a word mushed together,"\
+	" such as \"3fizz\" or \"5buzz\"."\
 	"\n\n"\
-	"If a PAIR can divide the current number, its word is printed instead of the current number. If multiple PAIRs can divide the number, all of their words are printed. PAIRs with smaller numbers are printed first."
+	"If a PAIR can divide the current number,"\
+	" its word is printed instead of the current number."\
+	" If multiple PAIRs can divide the number,"\
+	" all of their words are printed."\
+	" PAIRs with smaller numbers are printed first."
 
 #define OPTIONS \
-	"  -p\tThe words append the number, instead of replacing it, so both are visible."
+	"  -p\tThe words append the number, instead of replacing it,"\
+	" so both are visible."
 
 #define EX1 \
 	"  " NAME " 16 3fizz 5buzz"
@@ -35,12 +43,10 @@ usage_print(void)
 	puts(FORMAT);
 	puts(DESCR);
 
-	putchar('\n');
-	puts("Options:");
+	puts("\nOptions:");
 	puts(OPTIONS);
 
-	putchar('\n');
-	puts("Examples:");
+	puts("\nExamples:");
 	puts(EX1);
 	puts(EX1_DESCR);
 
