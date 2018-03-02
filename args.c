@@ -10,7 +10,7 @@
 extern struct Options options;
 
 static void
-parse_pair(const char *arg, struct List *list)
+parse_pair(const char *arg)
 {
 	assert(arg != NULL);
 
@@ -22,7 +22,7 @@ parse_pair(const char *arg, struct List *list)
 			options.max = num;
 
 		else
-			list_add(list, num, text);
+			list_add(num, text);
 
 	} else {
 		printf("Ignoring: %s\n", arg);
@@ -30,7 +30,7 @@ parse_pair(const char *arg, struct List *list)
 }
 
 static void
-parse_arg(const char *arg, struct List *list)
+parse_arg(const char *arg)
 {
 	assert(arg != NULL);
 
@@ -38,17 +38,17 @@ parse_arg(const char *arg, struct List *list)
 		options_parse(arg + 1);
 
 	else
-		parse_pair(arg, list);
+		parse_pair(arg);
 }
 
 /* export */
 void
-args_parse(int argc, char **argv, struct List *list)
+args_parse(int argc, char **argv)
 {
 	assert(argv != NULL);
 
 	if (--argc) {
-		parse_arg(argv[argc], list);
-		args_parse(argc, argv, list);
+		parse_arg(argv[argc]);
+		args_parse(argc, argv);
 	}
 }
