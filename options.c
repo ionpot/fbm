@@ -15,6 +15,10 @@ options_parse(const char *ch)
 		options.always_print_number = 1;
 		break;
 
+	case 'd':
+		options.print_debug_info = 1;
+		break;
+
 	case '\0':
 		return;
 

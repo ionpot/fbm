@@ -1,10 +1,10 @@
 #include "list.h"
 
+#include "debug.h"
 #include "pair.h"
 
 #include <assert.h>
 #include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 static struct {
@@ -175,7 +175,7 @@ list_add(long number, const char *text)
 	struct Pair *pair = list.buffer + list.count;
 
 	pair_init(pair, number, text);
-	printf("Pair %ld %s\n", pair->number, pair->text);
+	debug("Pair %ld %s", pair->number, pair->text);
 
 	list.count += 1;
 }
@@ -222,7 +222,7 @@ list_findlcm()
 		find_lcm_pair();
 	}
 
-	printf("LCM %ld %s\n", list.lcm->number, list.lcm->text);
+	debug("LCM %ld %s", list.lcm->number, list.lcm->text);
 }
 
 void
