@@ -10,8 +10,10 @@ extern void usage_print(void);
 static void
 begin(void)
 {
-	if (!options.max)
-		goto no_max;
+	if (!options.max) {
+		puts("No max provided.");
+		return;
+	}
 
 	if (list_count()) {
 		list_sort();
@@ -22,11 +24,6 @@ begin(void)
 	} else {
 		print_nums();
 	}
-
-	return;
-
-no_max:
-	puts("No max provided.");
 }
 
 int
