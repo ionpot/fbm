@@ -6,6 +6,8 @@ struct Options {
 	long max;
 };
 
+extern struct Options options;
+
 void options_parse(const char *);
 
 #endif

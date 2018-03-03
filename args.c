@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern struct Options options;
-
 static void
 parse_pair(const char *arg)
 {

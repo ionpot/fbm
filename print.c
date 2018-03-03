@@ -6,8 +6,6 @@
 
 typedef void (*printer)(long);
 
-extern struct Options options;
-
 static void
 printnum(long i)
 {

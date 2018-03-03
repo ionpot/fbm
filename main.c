@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern struct Options options;
-
 extern void usage_print(void);
 
 static void
