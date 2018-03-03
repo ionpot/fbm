@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cc -Wall -o fbm *.c
+cc -Wall -Wextra -o fbm *.c
