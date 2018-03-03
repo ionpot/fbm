@@ -5,7 +5,6 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 extern void usage_print(void);
 
