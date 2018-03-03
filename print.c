@@ -1,7 +1,6 @@
 #include "list.h"
 #include "options.h"
 
-#include <assert.h>
 #include <stdio.h>
 
 typedef void (*printer)(long);

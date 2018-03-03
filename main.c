@@ -3,7 +3,6 @@
 #include "options.h"
 #include "print.h"
 
-#include <assert.h>
 #include <stdio.h>
 
 extern void usage_print(void);
